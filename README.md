@@ -45,3 +45,29 @@ We will be working off of the algorithm described in this paper:
 https://papers.nips.cc/paper/2019/file/20f07591c6fcb220ffe637cda29bb3f6-Paper.pdf
 We will first apply the algorithm to the setting described above. We will then attempt to come up with
 a better approach, taking the topology of the sigma nodes into account to achieve a better result.
+
+# Environment File 
+To ensure consistent and reproducable starting environments, we store the starting state
+in a JSON file.
+
+The two necessary properties in this file are 'arms' and 'nodes'.
+'arms' define the arms to be pulled, and 'nodes' define the common
+nodes. Both of these are lists of tuples.
+
+For 'arms', a tuple is of the pattern [arm_id, mean, std]
+
+For 'nodes', a tuple is of the pattern [node_id, failure_probability]. Failure probability is a number between 0 and 1.
+
+mapping is a list of tuples of the form [arm_id, node_id], linking
+an arm to a node.
+
+'failure_penalty' is the penalty applied to a arm where a mapped node has failed. This is optional. The default is 0. 
+
+'seed' is an optional value for seeding the distribution.
+
+Both node_id and arm_id are arbitrary unique strings. 
+A node_id and arm_id may have the same string id,
+but any two given node_id must be unique. Likewise for arm_id 
+
+
+See [reference.json](reference.json) for examples
