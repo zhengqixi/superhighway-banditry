@@ -1,0 +1,27 @@
+from environment import Highway
+
+
+from environment import Highway
+highway = Highway.from_json_file("reference.json")
+print(highway.arms)
+print(highway.nodes)
+print(highway.arms_to_nodes)
+print(highway.failure_penalty)
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
+print(highway.step("b"))
