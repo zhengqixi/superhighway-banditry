@@ -1,4 +1,4 @@
-from typing import List, Tuple, Type, TypeVar
+from typing import Dict, List, Tuple, Type, TypeVar
 from itertools import groupby
 from numpy.random import default_rng
 import math
@@ -125,19 +125,23 @@ class Highway():
     def from_json_file(cls: Type[Highway], filename: str) -> Highway:
         with open(filename, 'r') as json_file:
             json_dump = json.load(json_file)
-            arms = json_dump["arms"]
-            nodes = json_dump["nodes"]
-            penalty = 0
-            if "failure_penalty" in json_dump:
-                penalty = json_dump["failure_penalty"]
-            mapping = []
-            if "mapping" in json_dump:
-                mapping = json_dump["mapping"]
-            highway = cls(arms=arms, nodes=nodes,
-                          mapping=mapping, failure_penalty=penalty)
-            seed = None
-            if "seed" in json_dump:
-                seed = json_dump["seed"]
-            highway = cls(arms=arms, nodes=nodes,
-                          mapping=mapping, failure_penalty=penalty, seed=seed)
-            return highway
+            return Highway.from_dict(json_dump)
+
+    @classmethod
+    def from_dict(cls: Type[Highway], builder: Dict) -> Highway:
+        arms = builder["arms"]
+        nodes = builder["nodes"]
+        penalty = 0
+        if "failure_penalty" in builder:
+            penalty = builder["failure_penalty"]
+        mapping = []
+        if "mapping" in builder:
+            mapping = builder["mapping"]
+        highway = cls(arms=arms, nodes=nodes,
+                      mapping=mapping, failure_penalty=penalty)
+        seed = None
+        if "seed" in builder:
+            seed = builder["seed"]
+        highway = cls(arms=arms, nodes=nodes,
+                      mapping=mapping, failure_penalty=penalty, seed=seed)
+        return highway
