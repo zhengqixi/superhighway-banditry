@@ -1,4 +1,3 @@
-from typing import List
 from environment import Highway
 from enum import Enum
 import numpy as np

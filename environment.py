@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple, Type, TypeVar
 from itertools import groupby
 from numpy.random import default_rng
+import numpy as np
 import math
 import json
 
@@ -81,23 +82,36 @@ class Highway():
                     break
         return [arm_reward, penalty_applied]
 
-    @property
+    def pull_arm_n_times(self, arm: str, n: int, omit_penalty: bool = False) -> Tuple[List[float], List[bool]]:
+        if arm not in self._arms_dict:
+            raise Exception("{} is not a valid arm to pull".format(arm))
+        arm_obj = self._arms_dict[arm]
+        arm_rewards = self._generator.normal(
+            loc=arm_obj.mean, scale=arm_obj.variance, size=n)
+        if arm not in self._arms_to_nodes:
+            penalty_bool = None
+            if not omit_penalty:
+                penalty_bool = np.full(n, fill_value=False)
+            return (arm_rewards, penalty_bool)
+        return (arm_rewards, [])
+
+    @ property
     def arms(self):
         return [x.id for x in self._arms]
 
-    @property
+    @ property
     def nodes(self):
         return [x.id for x in self._nodes]
 
-    @property
+    @ property
     def arms_to_nodes(self):
         return {x[0]: [y.id for y in x[1]] for x in self._arms_to_nodes.items()}
 
-    @property
+    @ property
     def failure_penalty(self):
         return self._failure_penalty
 
-    @property
+    @ property
     def best_arm(self) -> Tuple[str, float]:
         '''
         The best arm will be the one that has the highest expected value.
@@ -121,13 +135,13 @@ class Highway():
                 best_so_far = (arm.id, arm_expected_value)
         return best_so_far
 
-    @classmethod
+    @ classmethod
     def from_json_file(cls: Type[Highway], filename: str) -> Highway:
         with open(filename, 'r') as json_file:
             json_dump = json.load(json_file)
             return Highway.from_dict(json_dump)
 
-    @classmethod
+    @ classmethod
     def from_dict(cls: Type[Highway], builder: Dict) -> Highway:
         arms = builder["arms"]
         nodes = builder["nodes"]
