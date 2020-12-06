@@ -93,7 +93,19 @@ class Highway():
             if not omit_penalty:
                 penalty_bool = np.full(n, fill_value=False)
             return (arm_rewards, penalty_bool)
-        return (arm_rewards, [])
+        else:
+            failure_probabilities = self._generator.uniform(size=n)
+            apply_penalty = np.full(n, fill_value=False)
+            for node in self._arms_to_nodes[arm]:
+                apply_penalty_for_node = failure_probabilities > node.failure_probability
+                apply_penalty = np.logical_or(
+                    apply_penalty, apply_penalty_for_node)
+            arm_rewards = arm_rewards - self._failure_penalty * \
+                np.array(apply_penalty, dtype=int)
+            if omit_penalty:
+                return (arm_rewards, [])
+            else:
+                return (arm_rewards, apply_penalty)
 
     @ property
     def arms(self):
