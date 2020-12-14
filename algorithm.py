@@ -1,3 +1,4 @@
+from typing import List, Tuple
 from environment import Highway
 from enum import Enum
 import numpy as np
@@ -35,5 +36,5 @@ class Algorithm:
         else:
             raise Exception("Unknown grid type")
 
-    def run(self) -> float:
+    def run(self) -> Tuple[float, List[int]]:
         raise NotImplementedError("Not implemented in base class")
