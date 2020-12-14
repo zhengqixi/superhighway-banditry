@@ -187,7 +187,7 @@ def generate_plots(m_min: int, m_max: int, t: int, gamma: float, k: int, iterati
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Run the BaSE algorithm with customizable inputs")
-    parser.add_argument('-g', '--gamma', type=int,
+    parser.add_argument('-g', '--gamma', type=float,
                         help='gamma variable for BaSE algorithm', default=0.5)
     parser.add_argument('--m_min', type=int,
                         help='Minimum number of batches', default=2)
