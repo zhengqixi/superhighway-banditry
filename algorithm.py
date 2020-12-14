@@ -8,6 +8,7 @@ class GridType(Enum):
     minimax = 1
     geometric = 2
     arithmetic = 3
+    adaptive = 4
 
 
 class Algorithm:
@@ -33,6 +34,8 @@ class Algorithm:
             return grid
         elif grid_type == GridType.arithmetic:
             return np.floor(np.linspace(start=0, stop=T, num=M+1))
+        elif grid_type == GridType.adaptive:
+            return []
         else:
             raise Exception("Unknown grid type")
 

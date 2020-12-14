@@ -71,10 +71,11 @@ class BaSEAlgorithm(Algorithm):
         for i in final_avgs:
             if i[1] > max_avg_reward:
                 selected_best_arm = i[0]
-        final_pulls = self._grid[self._M] - self._grid[self._M - 1]
-        for i in range(0, int(final_pulls)):
-            pull_reward = self._environment.pull_arm(selected_best_arm)
-            regret += best_arm[1] - pull_reward[0]
+        final_pulls = int(self._grid[self._M] - self._grid[self._M - 1])
+        pull_results = self._environment.pull_arm_n_times(
+            selected_best_arm, final_pulls, True)
+        reward_for_arm = np.sum(pull_results[0])
+        regret += best_arm[1] * final_pulls - reward_for_arm
         return (regret, active_arms_over_batches)
 
 
@@ -195,7 +196,7 @@ if __name__ == "__main__":
                         help='Maximum number of batches', default=8)
     parser.add_argument('-k', type=int, help='Number of arms', default=100)
     parser.add_argument(
-        '-t', type=int, help='Total number of pulls', default=5*10**6)
+        '-t', type=int, help='Total number of pulls', default=5*10**4)
     parser.add_argument(
         '-i', '--iterations', type=int, help='Iterations per trial', default=200
     )
