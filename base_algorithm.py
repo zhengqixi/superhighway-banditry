@@ -120,14 +120,11 @@ def run(m: int, t: int, gridtype: GridType, gamma: float = 0.5, k: int = 3, iter
 def generate_plots(m_min: int, m_max: int, t: int, gamma: float, k: int, iterations: int, prefix: str) -> None:
     m_values = [x for x in range(m_min, m_max+1)]
     arithmetic_skip = False
-    geometric_skip = False
     minimax_skip = False
     arithmetic_regret = []
-    geometric_regret = []
     minimax_regret = []
     for m in m_values:
         arithmetic_arms = None
-        geometric_arms = None
         minimax_arms = None
         if not arithmetic_skip:
             result = run(m, t, GridType.arithmetic, gamma, k, iterations)
@@ -136,13 +133,6 @@ def generate_plots(m_min: int, m_max: int, t: int, gamma: float, k: int, iterati
             else:
                 arithmetic_regret.append(result[0])
                 arithmetic_arms = (result[1], result[2])
-        if not geometric_skip:
-            result = run(m, t, GridType.geometric, gamma, k, iterations)
-            if result[0] == math.inf:
-                geometric_skip = True
-            else:
-                geometric_regret.append(result[0])
-                geometric_arms = (result[1], result[2])
         if not minimax_skip:
             result = run(m, t, GridType.minimax, gamma, k, iterations)
             if result[0] == math.inf:
@@ -155,9 +145,6 @@ def generate_plots(m_min: int, m_max: int, t: int, gamma: float, k: int, iterati
         if arithmetic_arms is not None:
             plt.errorbar([x for x in range(len(arithmetic_arms[0]))],
                          arithmetic_arms[0], fmt='b', yerr=arithmetic_arms[1], label='arithmetic')
-        if geometric_arms is not None:
-            plt.errorbar([x for x in range(len(geometric_arms[0]))],
-                         geometric_arms[0], fmt='g', yerr=geometric_arms[1], label='geometric')
         if minimax_arms is not None:
             plt.errorbar([x for x in range(len(minimax_arms[0]))],
                          minimax_arms[0], fmt='r', yerr=minimax_arms[1], label='minimax')
@@ -173,8 +160,6 @@ def generate_plots(m_min: int, m_max: int, t: int, gamma: float, k: int, iterati
     plt.locator_params(axis='x', integer=True)
     plt.plot(m_values[:len(arithmetic_regret)],
              arithmetic_regret, 'b', label='arithmetic')
-    plt.plot(m_values[:len(geometric_regret)],
-             geometric_regret, 'g', label='geometric')
     plt.plot(m_values[:len(minimax_regret)],
              minimax_regret, 'r', label='minimax')
     plt.xlabel('M')
